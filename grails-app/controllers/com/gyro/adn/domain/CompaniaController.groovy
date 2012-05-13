@@ -100,4 +100,17 @@ class CompaniaController {
             redirect(action: "show", id: params.id)
         }
     }
+
+    def clasificacionSelected = {
+        def clasificacion = CompaniaClasificacion.get(params.id)
+        render g.select(optionKey: 'id', 
+                        from: clasificacion.subclasificaciones, 
+                        id: 'subclasificaciones', 
+                        name: 'subclasificaciones', 
+                        multiple: 'multiple',
+                        size: '5',
+                        class: 'many-to-many', 
+                        required: '', 
+                        value: '${companiaInstance?.subclasificaciones*.id}')
+    }
 }

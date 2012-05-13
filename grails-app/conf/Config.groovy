@@ -91,3 +91,6 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+grails.views.javascript.library="jquery"
+

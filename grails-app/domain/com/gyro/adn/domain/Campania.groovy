@@ -15,7 +15,8 @@ class Campania {
 
 	static hasMany = [citas: Cita, 
 					  pagos: Pago, 
-					  archivos: Archivo]
+					  archivos: Archivo,
+                      usuarios: CampaniaUsuario]
 
     static constraints = {
     	nombre nullable:false, unique:true

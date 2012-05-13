@@ -14,6 +14,69 @@
 		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'apple-touch-icon-retina.png')}">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
+		<g:javascript library="jquery" plugin="jquery"/>
+		<g:javascript>
+			$(document).ready(function() { 	
+				$('#compania').ready(function() {
+					$("#compania").change();
+				});
+				$('#pais').ready(function() {
+					$("#pais").change();
+				});
+				$('#clasificacion').ready(function() {
+					$("#clasificacion").change();
+				});
+			    $("#pais").change(function() {
+			    	$.ajax({
+			        	url: "/gyro-adn/address/paisSelected",
+			            data: { id: this.value, idEstado: $("#estado").val() },
+			            cache: false,
+			            success: function(html) {
+			            	$("#estado").html(html);
+			            	$("#estado").change();
+			            }
+			        });
+			    });
+			    $("#estado").change(function() {
+			    	$.ajax({
+			        	url: "/gyro-adn/address/estadoSelected",
+			            data: { id: this.value, idMunicipio: $("#municipio").val() },
+			            cache: false,
+			            success: function(html) {
+			            	$("#municipio").html(html);
+			            }
+			        });
+			    });
+			    $("#clasificacion").change(function() {
+			    	$.ajax({
+			        	url: "/gyro-adn/compania/clasificacionSelected",
+			            data: "id=" + this.value,
+			            cache: false,
+			            success: function(html) {
+			            	$("#subclasificaciones").html(html);
+			            }
+			        });
+			    });
+			    $("#compania").change(function() {
+			    	$.ajax({
+			        	url: "/gyro-adn/campania/companiaSelectedProducto",
+			        	data: { id: this.value, idProducto: $("#producto").val() },
+			            cache: false,
+			            success: function(html) {
+			            	$("#producto").html(html);
+			            }
+			        });        
+			        $.ajax({
+			            url: "/gyro-adn/campania/companiaSelectedContacto",
+			        	data: { id: this.value, idContacto: $("#contacto").val()  },
+			            cache: false,
+			            success: function(html) {
+			            	$("#contacto").html(html);
+			            }
+			        });    
+			    });
+			});
+		</g:javascript>
 		<g:layoutHead/>
         <r:layoutResources />
 	</head>

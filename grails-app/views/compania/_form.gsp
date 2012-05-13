@@ -1,7 +1,5 @@
 <%@ page import="com.gyro.adn.domain.Compania" %>
 
-
-
 <div class="fieldcontain ${hasErrors(bean: companiaInstance, field: 'nombre', 'error')} required">
 	<label for="nombre">
 		<g:message code="compania.nombre.label" default="Nombre" />
@@ -47,7 +45,7 @@
 		<g:message code="compania.estado.label" default="Estado" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="estado" name="municipio.estado.id" from="${com.gyro.adn.domain.Estado.list()}" optionKey="id" required="" value="${companiaInstance?.municipio?.estado?.id}" class="many-to-one"/>
+	<g:select id="estado" name="municipio.estado.id" from="${companiaInstance?.municipio?.estado?.pais?.estados}" optionKey="id" required="" value="${companiaInstance?.municipio?.estado?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: companiaInstance, field: 'municipio', 'error')} required">
@@ -55,7 +53,7 @@
 		<g:message code="compania.municipio.label" default="Municipio" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="municipio" name="municipio.id" from="${com.gyro.adn.domain.Municipio.list()}" optionKey="id" required="" value="${companiaInstance?.municipio?.id}" class="many-to-one"/>
+	<g:select id="municipio" name="municipio.id" from="${companiaInstance?.municipio?.estado?.municipios}" optionKey="id" required="" value="${companiaInstance?.municipio?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: companiaInstance, field: 'fechaInicioRelacion', 'error')} required">
@@ -68,18 +66,18 @@
 
 <div class="fieldcontain ${hasErrors(bean: companiaInstance, field: 'subclasificaciones.clasificacion', 'error')} required">
 	<label for="clasificacion">
-		<g:message code="compania.clasificacion.label" default="Pais" />
+		<g:message code="compania.clasificacion.label" default="Clasificacion" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="clasificacion" name="municipio.subclasificaciones.clasificacion.id" from="${com.gyro.adn.domain.CompaniaClasificacion.list()}" optionKey="id" required="" value="${companiaInstance?.subclasificaciones?.toArray()?.getAt(0)?.clasificacion?.id}" class="many-to-one"/>
+	<g:select id="clasificacion" name="subclasificaciones.clasificacion.id" from="${com.gyro.adn.domain.CompaniaClasificacion.list()}" optionKey="id" required="" value="${companiaInstance?.subclasificaciones?.toArray()?.getAt(0)?.clasificacion?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: companiaInstance, field: 'subclasificaciones', 'error')} ">
 	<label for="subclasificaciones">
 		<g:message code="compania.subclasificaciones.label" default="Subclasificaciones" />
-		
+		<span class="required-indicator">*</span>
 	</label>
-	<g:select name="subclasificaciones" from="${com.gyro.adn.domain.CompaniaSubclasificacion.list()}" multiple="multiple" optionKey="id" size="5" value="${companiaInstance?.subclasificaciones*.id}" class="many-to-many"/>
+	<g:select id="subclasificaciones" name="subclasificaciones" from="${companiaInstance?.subclasificaciones?.toArray()?.getAt(0)?.clasificacion?.subclasificaciones}" multiple="multiple" optionKey="id" size="5" required="" value="${companiaInstance?.subclasificaciones*.id}" class="many-to-many"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: companiaInstance, field: 'campanias', 'error')} ">

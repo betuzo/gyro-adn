@@ -10,12 +10,28 @@
 	<g:textField name="nombre" value="${campaniaInstance?.nombre}"/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: campaniaInstance, field: 'producto.compania', 'error')} required">
+        <label for="compania">
+                <g:message code="campania.compania.label" default="Compañia" />
+                <span class="required-indicator">*</span>
+        </label>
+        <g:select id="compania" name="compania.id" from="${com.gyro.adn.domain.Compania.list()}" optionKey="id" required="" value="${campaniaInstance?.producto?.compania?.id}" class="many-to-one"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: campaniaInstance, field: 'producto', 'error')} required">
-	<label for="producto">
-		<g:message code="campania.producto.label" default="Producto" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="producto" name="producto.id" from="${com.gyro.adn.domain.Producto.list()}" optionKey="id" required="" value="${campaniaInstance?.producto?.id}" class="many-to-one"/>
+        <label for="producto">
+                <g:message code="campania.producto.label" default="Producto" />
+                <span class="required-indicator">*</span>
+        </label>
+        <g:select id="producto" name="producto.id" from="${campaniaInstance?.producto?.compania?.productos}" optionKey="id" required="" value="${campaniaInstance?.producto?.id}" class="many-to-one"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: campaniaInstance, field: 'contacto', 'error')} required">
+        <label for="contacto">
+                <g:message code="campania.contacto.label" default="Contacto" />
+                <span class="required-indicator">*</span>
+        </label>
+        <g:select id="contacto" name="contacto.id" from="${campaniaInstance?.contacto?.compania?.contactos}" optionKey="id" required="" value="${campaniaInstance?.contacto?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: campaniaInstance, field: 'jefeCampania', 'error')} required">
@@ -24,14 +40,6 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="jefeCampania" name="jefeCampania.id" from="${com.gyro.adn.domain.JefeCampania.list()}" optionKey="id" required="" value="${campaniaInstance?.jefeCampania?.id}" class="many-to-one"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: campaniaInstance, field: 'contacto', 'error')} required">
-	<label for="contacto">
-		<g:message code="campania.contacto.label" default="Contacto" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="contacto" name="contacto.id" from="${com.gyro.adn.domain.CompaniaContacto.list()}" optionKey="id" required="" value="${campaniaInstance?.contacto?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: campaniaInstance, field: 'precio', 'error')} required">
@@ -128,6 +136,23 @@
 </g:each>
 <li class="add">
 <g:link controller="pago" action="create" params="['campania.id': campaniaInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'pago.label', default: 'Pago')])}</g:link>
+</li>
+</ul>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: campaniaInstance, field: 'usuarios', 'error')} ">
+	<label for="usuarios">
+		<g:message code="campania.usuarios.label" default="Usuarios" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${campaniaInstance?.usuarios?}" var="u">
+    <li><g:link controller="campaniaUsuario" action="show" id="${u.id}">${u?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="campaniaUsuario" action="create" params="['campania.id': campaniaInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'campaniaUsuario.label', default: 'CampaniaUsuario')])}</g:link>
 </li>
 </ul>
 

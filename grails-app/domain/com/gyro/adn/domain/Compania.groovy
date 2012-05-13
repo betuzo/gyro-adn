@@ -21,7 +21,7 @@ class Compania {
     	codigoPostal blank:false
     	municipio nullable:false
     	fechaInicioRelacion nullable:false
-    	subclasificaciones nullable:true
+    	subclasificaciones nullable:false
     }
 
     String toString(){

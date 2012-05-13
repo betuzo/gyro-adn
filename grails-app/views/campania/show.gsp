@@ -32,11 +32,29 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${campaniaInstance?.producto?.compania}">
+				<li class="fieldcontain">
+					<span id="compania-label" class="property-label"><g:message code="campania.compania.label" default="Compañia" /></span>
+					
+						<span class="property-value" aria-labelledby="compania-label"><g:link controller="compania" action="show" id="${campaniaInstance?.producto?.compania?.id}">${campaniaInstance?.producto?.compania?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+
 				<g:if test="${campaniaInstance?.producto}">
 				<li class="fieldcontain">
 					<span id="producto-label" class="property-label"><g:message code="campania.producto.label" default="Producto" /></span>
 					
 						<span class="property-value" aria-labelledby="producto-label"><g:link controller="producto" action="show" id="${campaniaInstance?.producto?.id}">${campaniaInstance?.producto?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+
+				<g:if test="${campaniaInstance?.contacto}">
+				<li class="fieldcontain">
+					<span id="contacto-label" class="property-label"><g:message code="campania.contacto.label" default="Contacto" /></span>
+					
+						<span class="property-value" aria-labelledby="contacto-label"><g:link controller="companiaContacto" action="show" id="${campaniaInstance?.contacto?.id}">${campaniaInstance?.contacto?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>
@@ -46,15 +64,6 @@
 					<span id="jefeCampania-label" class="property-label"><g:message code="campania.jefeCampania.label" default="Jefe Campania" /></span>
 					
 						<span class="property-value" aria-labelledby="jefeCampania-label"><g:link controller="jefeCampania" action="show" id="${campaniaInstance?.jefeCampania?.id}">${campaniaInstance?.jefeCampania?.encodeAsHTML()}</g:link></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${campaniaInstance?.contacto}">
-				<li class="fieldcontain">
-					<span id="contacto-label" class="property-label"><g:message code="campania.contacto.label" default="Contacto" /></span>
-					
-						<span class="property-value" aria-labelledby="contacto-label"><g:link controller="companiaContacto" action="show" id="${campaniaInstance?.contacto?.id}">${campaniaInstance?.contacto?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>
@@ -141,6 +150,17 @@
 					
 						<g:each in="${campaniaInstance.pagos}" var="p">
 						<span class="property-value" aria-labelledby="pagos-label"><g:link controller="pago" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></span>
+						</g:each>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${campaniaInstance?.usuarios}">
+				<li class="fieldcontain">
+					<span id="usuarios-label" class="property-label"><g:message code="campania.usuarios.label" default="Usuarios" /></span>
+					
+						<g:each in="${campaniaInstance.usuarios}" var="u">
+						<span class="property-value" aria-labelledby="usuarios-label"><g:link controller="campaniaUsuario" action="show" id="${u.id}">${u?.encodeAsHTML()}</g:link></span>
 						</g:each>
 					
 				</li>

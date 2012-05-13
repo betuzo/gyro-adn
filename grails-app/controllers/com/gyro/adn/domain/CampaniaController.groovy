@@ -100,4 +100,26 @@ class CampaniaController {
             redirect(action: "show", id: params.id)
         }
     }
+
+    def companiaSelectedProducto = {
+        def compania = Compania.get(params.id)
+        render g.select(optionKey: 'id', 
+                        from: compania.productos, 
+                        id: 'producto', 
+                        name: 'producto.id', 
+                        class: 'many-to-one', 
+                        required: '', 
+                        value: params.idProducto)
+    }
+
+    def companiaSelectedContacto = {
+        def compania = Compania.get(params.id)
+        render g.select(optionKey: 'id', 
+                        from: compania.contactos, 
+                        id: 'contacto', 
+                        name: 'contacto.id', 
+                        class: 'many-to-one', 
+                        required: '', 
+                        value: params.idContacto)
+    }
 }
