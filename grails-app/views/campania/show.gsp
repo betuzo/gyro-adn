@@ -5,6 +5,7 @@
 	<head>
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'campania.label', default: 'Campania')}" />
+		<g:set var="estadisticas" value="${message(code: 'campania.estadisticas.label', default: 'Estadisticas MailChimp')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 	</head>
 	<body>
@@ -167,6 +168,35 @@
 				</g:if>
 			
 			</ol>
+
+			<div id="list-campania" class="content scaffold-list" role="main">
+				<h1><g:message code="default.list.label" args="[estadisticas]" /></h1>
+				<table>
+					<thead>
+						<tr>
+
+							<th><g:message code="campania.estadisticas.label" default="Estadistica" /></th>	
+
+							<th><g:message code="campania.valor.label" default="Valor" /></th>			
+
+						</tr>
+					</thead>
+					<tbody>
+					<g:each in="${campaniaInstance.estadisticas}" status="i" var="campaniaEstadistica">
+						<g:if test="${fieldValue(bean: campaniaEstadistica, field: "key") != com.nwire.mailchimp.IMailChimpServices.CAMPAIGN_STATS_TIMESERIES}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+						
+							<td>${fieldValue(bean: campaniaEstadistica, field: "key")}</td>
+
+							<td>${fieldValue(bean: campaniaEstadistica, field: "value")}</td>
+						
+						</tr>							
+						</g:if>
+					</g:each>
+					</tbody>
+				</table>
+			</div>
+
 			<g:form>
 				<fieldset class="buttons">
 					<g:hiddenField name="id" value="${campaniaInstance?.id}" />

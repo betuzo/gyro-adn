@@ -12,6 +12,9 @@ class Campania {
 	Date fechaFin
 	String fase
 	String cid
+    HashMap<String, Object> estadisticas
+
+    static transients = ['estadisticas']
 
 	static hasMany = [citas: Cita, 
 					  pagos: Pago, 

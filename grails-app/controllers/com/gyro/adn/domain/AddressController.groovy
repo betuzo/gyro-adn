@@ -18,10 +18,8 @@ class AddressController {
     def paisSelected = {
         def pais = Pais.get(params.id)
         if (params.idEstado == 'null')
-        {
             params.idEstado = pais.estados?.toArray()?.getAt(0)?.id
-            println params.idEstado
-        }
+            
         render g.select(optionKey: 'id', 
                         from: pais.estados, 
                         id: 'estado', 

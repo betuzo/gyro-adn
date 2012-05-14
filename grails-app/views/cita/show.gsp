@@ -59,6 +59,24 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${citaInstance?.municipio?.estado?.pais}">
+				<li class="fieldcontain">
+					<span id="pais-label" class="property-label"><g:message code="cita.pais.label" default="Pais" /></span>
+					
+						<span class="property-value" aria-labelledby="pais-label"><g:link controller="pais" action="show" id="${citaInstance?.municipio?.estado?.pais?.id}">${citaInstance?.municipio?.estado?.pais?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+
+				<g:if test="${citaInstance?.municipio?.estado}">
+				<li class="fieldcontain">
+					<span id="estado-label" class="property-label"><g:message code="cita.estado.label" default="Estado" /></span>
+					
+						<span class="property-value" aria-labelledby="estado-label"><g:link controller="estado" action="show" id="${citaInstance?.municipio?.estado?.id}">${citaInstance?.municipio?.estado?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+
 				<g:if test="${citaInstance?.municipio}">
 				<li class="fieldcontain">
 					<span id="municipio-label" class="property-label"><g:message code="cita.municipio.label" default="Municipio" /></span>

@@ -1,8 +1,20 @@
 package com.gyro.adn.domain
 
 import org.springframework.dao.DataIntegrityViolationException
+import com.nwire.mailchimp.IMailChimpServices;
 
 class CampaniaController {
+
+    def gchimpService
+
+    def afterInterceptor = { model ->
+        def apiKey = gchimpService.apiKey
+        def keySize = apiKey.size()
+        def maskSize = keySize - 8
+
+        model.apiKey = '*' * maskSize  + apiKey[maskSize..keySize-1]
+        model.defaultListId = gchimpService.defaultListId
+    }
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -37,7 +49,11 @@ class CampaniaController {
             redirect(action: "list")
             return
         }
-
+        if (campaniaInstance.cid?.length() > 0){
+            def campaignStats = gchimpService.campaignStats(campaniaInstance.cid)
+            campaniaInstance.estadisticas = campaignStats
+        }
+        
         [campaniaInstance: campaniaInstance]
     }
 

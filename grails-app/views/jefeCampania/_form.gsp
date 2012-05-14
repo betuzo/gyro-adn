@@ -50,12 +50,28 @@
 	<g:field type="number" name="codigoPostal" required="" value="${fieldValue(bean: jefeCampaniaInstance, field: 'codigoPostal')}"/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: jefeCampaniaInstance, field: 'municipio.estado.pais', 'error')} required">
+	<label for="pais">
+		<g:message code="jefeCampania.pais.label" default="Pais" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:select id="pais" name="municipio.estado.pais.id" from="${com.gyro.adn.domain.Pais.list()}" optionKey="id" required="" value="${jefeCampaniaInstance?.municipio?.estado?.pais?.id}" class="many-to-one"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: jefeCampaniaInstance, field: 'municipio.estado', 'error')} required">
+	<label for="estado">
+		<g:message code="jefeCampania.estado.label" default="Estado" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:select id="estado" name="municipio.estado.id" from="${jefeCampaniaInstance?.municipio?.estado?.pais?.estados}" optionKey="id" required="" value="${jefeCampaniaInstance?.municipio?.estado?.id}" class="many-to-one"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: jefeCampaniaInstance, field: 'municipio', 'error')} required">
 	<label for="municipio">
 		<g:message code="jefeCampania.municipio.label" default="Municipio" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="municipio" name="municipio.id" from="${com.gyro.adn.domain.Municipio.list()}" optionKey="id" required="" value="${jefeCampaniaInstance?.municipio?.id}" class="many-to-one"/>
+	<g:select id="municipio" name="municipio.id" from="${jefeCampaniaInstance?.municipio?.estado?.municipios}" optionKey="id" required="" value="${jefeCampaniaInstance?.municipio?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: jefeCampaniaInstance, field: 'fechaRegistro', 'error')} required">

@@ -94,3 +94,7 @@ log4j = {
 
 grails.views.javascript.library="jquery"
 
+gchimp.apiUrl = 'https://us5.api.mailchimp.com:443/1.3/'
+
+gchimp.encoding = 'UTF-8'
+

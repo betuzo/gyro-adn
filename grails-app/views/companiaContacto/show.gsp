@@ -76,6 +76,24 @@
 					
 				</li>
 				</g:if>
+
+				<g:if test="${companiaContactoInstance?.municipio?.estado?.pais}">
+				<li class="fieldcontain">
+					<span id="pais-label" class="property-label"><g:message code="companiaContacto.pais.label" default="Pais" /></span>
+					
+						<span class="property-value" aria-labelledby="pais-label"><g:link controller="pais" action="show" id="${companiaContactoInstance?.municipio?.estado?.pais?.id}">${companiaContactoInstance?.municipio?.estado?.pais?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+
+				<g:if test="${companiaContactoInstance?.municipio?.estado}">
+				<li class="fieldcontain">
+					<span id="estado-label" class="property-label"><g:message code="companiaContacto.estado.label" default="Estado" /></span>
+					
+						<span class="property-value" aria-labelledby="estado-label"><g:link controller="estado" action="show" id="${companiaContactoInstance?.municipio?.estado?.id}">${companiaContactoInstance?.municipio?.estado?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
 			
 				<g:if test="${companiaContactoInstance?.municipio}">
 				<li class="fieldcontain">
