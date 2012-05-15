@@ -183,7 +183,7 @@
 					</thead>
 					<tbody>
 					<g:each in="${campaniaInstance.estadisticas}" status="i" var="campaniaEstadistica">
-						<g:if test="${fieldValue(bean: campaniaEstadistica, field: "key") != com.nwire.mailchimp.IMailChimpServices.CAMPAIGN_STATS_TIMESERIES}">
+						<g:if test="${fieldValue(bean: campaniaEstadistica, field: "key") != com.gyro.adn.domain.CampaniaController.CAMPAIGN_STATS_TIMESERIES}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
 							<td>${fieldValue(bean: campaniaEstadistica, field: "key")}</td>
