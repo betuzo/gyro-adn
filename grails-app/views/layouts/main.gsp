@@ -53,7 +53,6 @@
 			            data: { id: this.value, idSubclasificaciones: $("#subclasificaciones").val() },
 			            cache: false,
 			            success: function(html) {
-			            	alert(html);
 			            	$("#subclasificaciones").html(html);
 			            }
 			        });
