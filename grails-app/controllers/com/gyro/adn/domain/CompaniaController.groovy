@@ -37,11 +37,7 @@ class CompaniaController {
             redirect(action: "list")
             return
         }
-        println companiaInstance?.subclasificaciones*.id.getClass()
-        println companiaInstance?.subclasificaciones*.id
-        for(element in companiaInstance?.subclasificaciones*.id) {
-            println element.getClass()
-        }
+        
         [companiaInstance: companiaInstance]
     }
 
@@ -120,6 +116,5 @@ class CompaniaController {
                         class: 'many-to-many', 
                         required: '', 
                         value: idSubclasificaciones)
-                        //value: '${companiaInstance?.subclasificaciones*.id}')
     }
 }

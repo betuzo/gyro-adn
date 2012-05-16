@@ -95,6 +95,5 @@ log4j = {
 grails.views.javascript.library="jquery"
 
 mailchimp.apiUrl = 'https://us5.api.mailchimp.com:443/1.3/'
-mailchimp.apiKey = 'c396796add3f6c05b878220f4904b066-us5'
-mailchimp.defaultListId = '10093f6219'
+
 
