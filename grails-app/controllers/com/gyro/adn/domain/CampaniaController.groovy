@@ -79,14 +79,11 @@ class CampaniaController {
     }
 
     def showStatByUserByUrl() {
-        println "AQUI --------------> $params.id"
         def response = [:]
         if (params.cid?.length() > 0 && params.id?.length() > 0){
             mailchimpService.campaignEmailStatsAIM(params.cid, params.id) { json ->
                 if(json.get(CAMPAIGN_STATS_ERROR) == 0){
                     def rows = []
-                    println json?.get(CAMPAIGN_STATS_DATA)
-                    println json?.get(CAMPAIGN_STATS_DATA).getClass()
                     for(activityEmail in json?.get(CAMPAIGN_STATS_DATA)) {
                         for(element in activityEmail?.get(CAMPAIGN_STATS_ACTIVITY)) {
                             if (element?.get(CAMPAIGN_STATS_ACTION) == CAMPAIGN_STATS_ACTION_CLICK){

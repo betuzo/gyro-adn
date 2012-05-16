@@ -37,7 +37,7 @@ class CompaniaController {
             redirect(action: "list")
             return
         }
-
+        println companiaInstance?.subclasificaciones*.id.getClass()
         [companiaInstance: companiaInstance]
     }
 
@@ -103,6 +103,11 @@ class CompaniaController {
 
     def clasificacionSelected = {
         def clasificacion = CompaniaClasificacion.get(params.id)
+        println "Hola ${params.get('idSubclasificaciones[]')}"
+        ArrayList prueba = []
+        prueba = params.get('idSubclasificaciones[]')
+        println prueba.size()
+        println prueba.getClass()
         render g.select(optionKey: 'id', 
                         from: clasificacion.subclasificaciones, 
                         id: 'subclasificaciones', 
@@ -111,6 +116,7 @@ class CompaniaController {
                         size: '5',
                         class: 'many-to-many', 
                         required: '', 
-                        value: '${companiaInstance?.subclasificaciones*.id}')
+                        value: prueba)
+                        //value: '${companiaInstance?.subclasificaciones*.id}')
     }
 }

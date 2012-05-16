@@ -50,9 +50,10 @@
 			    $("#clasificacion").change(function() {
 			    	$.ajax({
 			        	url: "/gyro-adn/compania/clasificacionSelected",
-			            data: "id=" + this.value,
+			            data: { id: this.value, idSubclasificaciones: $("#subclasificaciones").val() },
 			            cache: false,
 			            success: function(html) {
+			            	alert(html);
 			            	$("#subclasificaciones").html(html);
 			            }
 			        });
