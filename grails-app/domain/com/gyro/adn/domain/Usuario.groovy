@@ -20,6 +20,12 @@ class Usuario {
 					  campanias: CampaniaUsuario, 
 					  productosComprados: Producto]
 
+    static transients = ['nombreCompleto']
+
+    String getNombreCompleto(){
+        return "${nombre} ${apellidoPaterno}"
+    }
+
     static constraints = {
     	nombre blank:false
     	apellidoPaterno blank:false

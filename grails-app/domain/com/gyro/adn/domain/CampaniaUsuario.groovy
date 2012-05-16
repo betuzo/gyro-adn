@@ -19,6 +19,6 @@ class CampaniaUsuario {
     }
 
     String toString(){
-    	return "${usuario} ${nivelUsuario} - ${campania}"
+    	return "${usuario} ${nivelUsuario}"
   	}
 }

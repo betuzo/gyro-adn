@@ -4,9 +4,43 @@
 <html>
 	<head>
 		<meta name="layout" content="main">
+		<title><g:message code="default.show.label" args="[entityName]" /></title>
 		<g:set var="entityName" value="${message(code: 'campania.label', default: 'Campania')}" />
 		<g:set var="estadisticas" value="${message(code: 'campania.estadisticas.label', default: 'Estadisticas MailChimp')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
+		<link rel="stylesheet" href="${resource(dir:'css',file:'ui.jqgrid.css')}" />
+		<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.20.custom.css')}" />
+		<g:javascript src='grid.locale-es.js'/>
+		<g:javascript src='jquery.jqGrid.min.js'/>
+		<g:javascript>
+			jQuery("#list11").jqGrid({
+			   	url: '${request.contextPath + '/campania/showStatByUser?cid='}' + $("#cid").html(), 
+				datatype: "json",
+				height: 200,
+			   	colNames:['Email','Nombre', 'Tipo', 'Enviado','Abierto','Click'],
+			   	colModel:[
+			   		{name:'email',index:'email', width:220},
+			   		{name:'nombre',index:'nombre', width:150},
+			   		{name:'tipo',index:'tipo', width:60},
+			   		{name:'enviado',index:'enviado', width:80, align:"right"},
+			   		{name:'abierto',index:'abierto', width:80, align:"right"},		
+			   		{name:'click',index:'click', width:80,align:"right"},		
+			   	],
+			   	rowNum:10,
+			   	rowList:[10,20,30],
+			   	pager: '#pager11',
+			   	sortname: 'email',
+			    viewrecords: true,
+			    sortorder: "desc",
+				multiselect: false,
+				subGrid : true,
+			    subGridUrl: '${request.contextPath + '/campania/showStatByUserByUrl?cid='}' + $("#cid").html(),
+			    subGridModel: [{ name  : ['Url','Fecha'], 
+			                    width : [120,70] } 
+			    ],
+			    caption: "Usuarios de Campañia"			
+			});
+			jQuery("#list11").jqGrid('navGrid','#pager11',{add:false,edit:false,del:false});
+		</g:javascript>
 	</head>
 	<body>
 		<a href="#show-campania" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
@@ -129,7 +163,7 @@
 				<li class="fieldcontain">
 					<span id="cid-label" class="property-label"><g:message code="campania.cid.label" default="Cid" /></span>
 					
-						<span class="property-value" aria-labelledby="cid-label"><g:fieldValue bean="${campaniaInstance}" field="cid"/></span>
+						<span id="cid" class="property-value" aria-labelledby="cid-label"><g:fieldValue bean="${campaniaInstance}" field="cid"/></span>
 					
 				</li>
 				</g:if>
@@ -156,18 +190,10 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${campaniaInstance?.usuarios}">
-				<li class="fieldcontain">
-					<span id="usuarios-label" class="property-label"><g:message code="campania.usuarios.label" default="Usuarios" /></span>
-					
-						<g:each in="${campaniaInstance.usuarios}" var="u">
-						<span class="property-value" aria-labelledby="usuarios-label"><g:link controller="campaniaUsuario" action="show" id="${u.id}">${u?.encodeAsHTML()}</g:link></span>
-						</g:each>
-					
-				</li>
-				</g:if>
-			
 			</ol>
+
+			<table id="list11"></table>
+			<div id="pager11"></div>
 
 			<div id="list-campania" class="content scaffold-list" role="main">
 				<h1><g:message code="default.list.label" args="[estadisticas]" /></h1>

@@ -2,9 +2,53 @@ package com.gyro.adn.domain
 
 import org.springframework.dao.DataIntegrityViolationException
 
+import grails.converters.JSON
+
 class CampaniaController {
 
     static final String CAMPAIGN_STATS_TIMESERIES           = "timeseries";
+    static final String CAMPAIGN_STATS_DATA                 = "data";
+    static final String CAMPAIGN_STATS_EMAIL                = "email";
+    static final String CAMPAIGN_STATS_STATUS               = "status";
+    static final String CAMPAIGN_STATS_STATUS_SENT          = "sent";
+    static final String CAMPAIGN_STATS_ACTION               = "action";
+    static final String CAMPAIGN_STATS_ACTION_OPEN          = "open";
+    static final String CAMPAIGN_STATS_ACTION_CLICK         = "click";
+    static final String CAMPAIGN_STATS_ERROR                = "error";
+    static final String CAMPAIGN_STATS_ACTIVITY             = "activity";
+    static final String CAMPAIGN_STATS_URL                  = "url";
+    static final String CAMPAIGN_STATS_TIMESTAMP            = "timestamp";
+
+    static final String CAMPAIGN_TYPE_REGULAR               = "regular";
+    static final String CAMPAIGN_TYPE_PLAINTEXT             = "plaintext";
+    static final String CAMPAIGN_TYPE_ABSPLIT               = "absplit";
+    static final String CAMPAIGN_TYPE_RSS                   = "rss";
+    static final String CAMPAIGN_TYPE_TRANS                 = "trans";
+
+    static final String CAMPAIGN_OPTION_LIST_ID             = "list_id";
+    static final String CAMPAIGN_OPTION_SUBJECT             = "subject";
+    static final String CAMPAIGN_OPTION_FROM_EMAIL          = "from_email";
+    static final String CAMPAIGN_OPTION_FROM_NAME           = "from_name";
+    static final String CAMPAIGN_OPTION_TEMPLATE_ID         = "template_id";
+    static final String CAMPAIGN_OPTION_FOLDER_ID           = "folder_id";
+    static final String CAMPAIGN_OPTION_TRACKING            = "tracking";
+    static final String CAMPAIGN_OPTION_TITLE               = "title";
+    static final String CAMPAIGN_OPTION_AUTHENTICATE        = "authenticate";
+    static final String CAMPAIGN_OPTION_ANALYTICS           = "analytics";
+    static final String CAMPAIGN_OPTION_ANALYTICS_GOOGLE    = "google";
+    static final String CAMPAIGN_OPTION_INLINE_CSS          = "inline_css";
+    static final String CAMPAIGN_OPTION_GENERATE_TEXT       = "generate_text";
+
+    static final String CAMPAIGN_CONTENT_HTML               = "html";
+    static final String CAMPAIGN_CONTENT_TEXT               = "text";
+    static final String CAMPAIGN_CONTENT_URL                = "url";
+    static final String CAMPAIGN_CONTENT_HTML_HEADER        = "html_HEADER";
+    static final String CAMPAIGN_CONTENT_HTML_MAIN          = "html_MAIN";
+    static final String CAMPAIGN_CONTENT_HTML_SIDECOLUMN    = "html_SIDECOLUMN";
+    static final String CAMPAIGN_CONTENT_HTML_FOOTER        = "html_FOOTER";
+
+    static final String AFIRMATIVO                          = "Si";
+    static final String NEGATIVO                            = "No";
 
     def mailchimpService
 
@@ -34,6 +78,92 @@ class CampaniaController {
         redirect(action: "show", id: campaniaInstance.id)
     }
 
+    def showStatByUserByUrl() {
+        println "AQUI --------------> $params.id"
+        def response = [:]
+        if (params.cid?.length() > 0 && params.id?.length() > 0){
+            mailchimpService.campaignEmailStatsAIM(params.cid, params.id) { json ->
+                if(json.get(CAMPAIGN_STATS_ERROR) == 0){
+                    def rows = []
+                    println json?.get(CAMPAIGN_STATS_DATA)
+                    println json?.get(CAMPAIGN_STATS_DATA).getClass()
+                    for(activityEmail in json?.get(CAMPAIGN_STATS_DATA)) {
+                        for(element in activityEmail?.get(CAMPAIGN_STATS_ACTIVITY)) {
+                            if (element?.get(CAMPAIGN_STATS_ACTION) == CAMPAIGN_STATS_ACTION_CLICK){
+                                def row = [:]
+                                row.id = element?.get(CAMPAIGN_STATS_URL)
+                                row.cell = [row.id, element?.get(CAMPAIGN_STATS_TIMESTAMP)]
+                                rows.add(row)
+                            }
+                        }
+                    }
+                    
+                    response.total = rows.size()
+                    response.rows = rows
+                }
+            }
+        }
+        response.page = "1"
+        response.records = "1"
+        render response as JSON
+    }
+
+    def showStatByUser() {
+        def response = [:]
+        if (params.cid?.length() > 0){
+            def usuarios = Campania.findByCid(params.cid).usuarios
+            response.total = usuarios.size()
+            def usuariosEnviados
+            def usuariosAbrirClick
+            mailchimpService.campaignMembers(params.cid) { json ->
+                usuariosEnviados = json 
+            }
+            mailchimpService.campaignEmailStatsAIMAll(params.cid) { json ->
+                usuariosAbrirClick = json 
+            }
+            def rows = []
+            for(usuario in usuarios) {
+                def esEnviado = NEGATIVO
+                def row = [:]
+                row.id = usuario?.usuario?.email
+                for(element in usuariosEnviados?.get(CAMPAIGN_STATS_DATA)) {
+                    if (element.get(CAMPAIGN_STATS_EMAIL) == usuario?.usuario?.email){
+                        esEnviado = element.get(CAMPAIGN_STATS_STATUS) == CAMPAIGN_STATS_STATUS_SENT ? AFIRMATIVO : NEGATIVO
+                        usuariosEnviados.remove(element)
+                        break
+                    }
+                }
+                def data = usuariosAbrirClick?.get(CAMPAIGN_STATS_DATA)
+                def abrir = NEGATIVO
+                def click = NEGATIVO
+                def totalAbrir = 0
+                def totalClick = 0
+                if (data?.containsKey(usuario?.usuario?.email)){
+                    for(element in data?.get(usuario?.usuario?.email)) {  
+                        switch(element?.get(CAMPAIGN_STATS_ACTION)) {
+                            case CAMPAIGN_STATS_ACTION_OPEN:
+                                totalAbrir++
+                            break
+                            case CAMPAIGN_STATS_ACTION_CLICK:
+                                totalClick++
+                            break
+                        }
+                    }
+                abrir = totalAbrir > 0 ? "$AFIRMATIVO($totalAbrir)" : NEGATIVO
+                click = totalClick > 0 ? "$AFIRMATIVO($totalClick)" : NEGATIVO
+                }
+
+                row.cell = [usuario?.usuario?.email, usuario?.usuario?.nombreCompleto,usuario?.nivelUsuario,esEnviado,abrir,click]
+                rows.add(row)
+            }
+            response.rows = rows
+        }
+        response.page = "1"
+        response.records = "1"
+
+        render response as JSON
+    }
+
     def show() {
         def campaniaInstance = Campania.get(params.id)
         if (!campaniaInstance) {
@@ -41,11 +171,14 @@ class CampaniaController {
             redirect(action: "list")
             return
         }
-        println campaniaInstance.cid
         if (campaniaInstance.cid?.length() > 0){
             mailchimpService.campaignStats(campaniaInstance.cid) { json ->
                 campaniaInstance.estadisticas = json    
             }
+            mailchimpService.campaignEmailStatsAIM(campaniaInstance.cid, 'fcruz@softeck.com') { json ->
+                println "campaignEmailStatsAIM"
+                println json    
+            }      
         }
         
         [campaniaInstance: campaniaInstance]

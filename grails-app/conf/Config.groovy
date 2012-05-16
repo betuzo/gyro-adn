@@ -96,3 +96,4 @@ grails.views.javascript.library="jquery"
 
 mailchimp.apiUrl = 'https://us5.api.mailchimp.com:443/1.3/'
 
+
