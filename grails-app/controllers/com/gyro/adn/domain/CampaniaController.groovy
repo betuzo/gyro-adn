@@ -19,6 +19,9 @@ class CampaniaController {
     static final String CAMPAIGN_STATS_URL                  = "url";
     static final String CAMPAIGN_STATS_TIMESTAMP            = "timestamp";
 
+    static final String CAMPAIGNS_FILTERS_CAMPAIGN_ID       = "campaign_id";
+
+
     static final String CAMPAIGN_TYPE_REGULAR               = "regular";
     static final String CAMPAIGN_TYPE_PLAINTEXT             = "plaintext";
     static final String CAMPAIGN_TYPE_ABSPLIT               = "absplit";
@@ -38,6 +41,24 @@ class CampaniaController {
     static final String CAMPAIGN_OPTION_ANALYTICS_GOOGLE    = "google";
     static final String CAMPAIGN_OPTION_INLINE_CSS          = "inline_css";
     static final String CAMPAIGN_OPTION_GENERATE_TEXT       = "generate_text";
+    static final String CAMPAIGN_OPTION_TYPE                = "type";
+    static final String CAMPAIGN_OPTION_ID                  = "id";
+    static final String CAMPAIGN_OPTION_SEND_TIME           = "send_time";
+    static final String CAMPAIGN_OPTION_ARCHIVE_URL         = "archive_url";
+    static final String CAMPAIGN_OPTION_TYPE_OPTS           = "type_opts";
+    static final String CAMPAIGN_OPTION_AUTO_FOOTER         = "auto_footer";
+    static final String CAMPAIGN_OPTION_CONTENT_TYPE        = "content_type";
+    static final String CAMPAIGN_OPTION_WEB_ID              = "web_id";
+    static final String CAMPAIGN_OPTION_TO_NAME             = "to_name";
+    static final String CAMPAIGN_OPTION_TIMEWARP            = "timewarp";
+    static final String CAMPAIGN_OPTION_AUTO_TWEET          = "auto_tweet";
+    static final String CAMPAIGN_OPTION_STATUS              = "status";
+    static final String CAMPAIGN_OPTION_ECOMM360            = "ecomm360";
+    static final String CAMPAIGN_OPTION_EMAILS_SENT         = "emails_sent";
+    static final String CAMPAIGN_OPTION_SEGMENT_OPTS        = "segment_opts";
+    static final String CAMPAIGN_OPTION_AUTO_FB_POST        = "auto_fb_post";
+    static final String CAMPAIGN_OPTION_TIMEWARP_SCHEDULE   = "timewarp_schedule";
+    static final String CAMPAIGN_OPTION_ANALYTICS_TAG       = "analytics_tag";
 
     static final String CAMPAIGN_CONTENT_HTML               = "html";
     static final String CAMPAIGN_CONTENT_TEXT               = "text";
@@ -172,8 +193,11 @@ class CampaniaController {
             mailchimpService.campaignStats(campaniaInstance.cid) { json ->
                 campaniaInstance.estadisticas = json    
             }
-            mailchimpService.campaignEmailStatsAIM(campaniaInstance.cid, 'fcruz@softeck.com') { json ->
-                println "campaignEmailStatsAIM"
+
+            def filters = [CAMPAIGNS_FILTERS_CAMPAIGN_ID : campaniaInstance.cid]
+
+            mailchimpService.campaigns(filters) { json ->
+                println "campaigns"
                 println json    
             }      
         }
