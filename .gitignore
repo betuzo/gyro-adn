@@ -2,6 +2,7 @@
 .project
 .settings
 build.xml
+Config.groovy
 /*.launch
 /*.tmpproj
 stacktrace.log
