@@ -9,7 +9,7 @@
 				border: .2em solid #fff;
 				margin: 2em 2em 1em;
 				padding: 1em;
-				width: 12em;
+				width: 16em;
 				float: left;
 				-moz-box-shadow: 0px 0px 1.25em #ccc;
 				-webkit-box-shadow: 0px 0px 1.25em #ccc;
@@ -72,45 +72,63 @@
 					margin-top: 0;
 				}
 			}
+
+			/*- Menu--------------------------- */
+	
+			#menu2 {
+				width: 200px;
+				border-style: solid solid none solid;
+				border-color: #eee;
+				}
+				
+			#menu2 li a {
+				height: 42px;
+			  	voice-family: "\"}\""; 
+			  	voice-family: inherit;
+			  	height: 35px;
+				text-decoration: none;
+				}	
+				
+			#menu2 li a:link, #menu2 li a:visited {
+				color: #3688BA;
+				display: block;
+				background-color: #eee;
+				padding: 8px 0 0 30px;
+				}
+				
+			#menu2 li a:hover {
+				color: #3688BA;
+				background-color: #fff;
+				padding: 8px 0 0 32px;
+				-moz-box-shadow: 0px 0px 1.25em #ccc;
+				-webkit-box-shadow: 0px 0px 1.25em #ccc;
+				box-shadow: 0px 0px 1.25em #ccc;
+				-moz-border-radius: 0.6em;
+				-webkit-border-radius: 0.6em;
+				border-radius: 0.6em;
+				}
+				
+	
 		</style>
 	</head>
 	<body>
 		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div id="status" role="complementary">
-			<h1>Application Status</h1>
-			<ul>
-				<li>App version: <g:meta name="app.version"/></li>
-				<li>Grails version: <g:meta name="app.grails.version"/></li>
-				<li>Groovy version: ${org.codehaus.groovy.runtime.InvokerHelper.getVersion()}</li>
-				<li>JVM version: ${System.getProperty('java.version')}</li>
-				<li>Reloading active: ${grails.util.Environment.reloadingAgentEnabled}</li>
-				<li>Controllers: ${grailsApplication.controllerClasses.size()}</li>
-				<li>Domains: ${grailsApplication.domainClasses.size()}</li>
-				<li>Services: ${grailsApplication.serviceClasses.size()}</li>
-				<li>Tag Libraries: ${grailsApplication.tagLibClasses.size()}</li>
-			</ul>
-			<h1>Installed Plugins</h1>
-			<ul>
-				<g:each var="plugin" in="${applicationContext.getBean('pluginManager').allPlugins}">
-					<li>${plugin.name} - ${plugin.version}</li>
-				</g:each>
-			</ul>
+			
+			<h1>Home</h2>
+			<div id="menu2">
+					<ul>
+						<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.naturalName } }">
+							<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.naturalName}</g:link>
+							</li>
+						</g:each>
+
+					</ul>
+			</div>
 		</div>
 		<div id="page-body" role="main">
-			<h1>Welcome to Grails</h1>
-			<p>Congratulations, you have successfully started your first Grails application! At the moment
-			   this is the default page, feel free to modify it to either redirect to a controller or display whatever
-			   content you may choose. Below is a list of controllers that are currently deployed in this application,
-			   click on each to execute its default action:</p>
-
-			<div id="controller-list" role="navigation">
-				<h2>Available Controllers:</h2>
-				<ul>
-					<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-						<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-					</g:each>
-				</ul>
-			</div>
+			<h1>Gyro</h1>
+			<p>El marketing es la orientación con la que se administra el mercadeo o la comercialización dentro de una organización. Así mismo, busca fidelizar clientes, mediante herramientas y estrategias; posiciona en la mente del consumidor un producto, marca, etc. buscando ser la opción principal y llegar al usuario final; parte de las necesidades del cliente o consumidor, para diseñar, organizar, ejecutar y controlar la función comercializadora o mercadeo de la organización.</p>
 		</div>
 	</body>
 </html>

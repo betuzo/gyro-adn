@@ -99,6 +99,7 @@ class CampaniaController {
         redirect(action: "show", id: campaniaInstance.id)
     }
 
+
     def showStatByUserByUrl() {
         def response = [:]
         if (params.cid?.length() > 0 && params.id?.length() > 0){
@@ -129,7 +130,9 @@ class CampaniaController {
     def showStatByUser() {
         def response = [:]
         if (params.cid?.length() > 0){
+            
             def usuarios = Campania.findByCid(params.cid).usuarios
+            println usuarios
             response.total = usuarios.size()
             def usuariosEnviados
             def usuariosAbrirClick
@@ -182,10 +185,37 @@ class CampaniaController {
         render response as JSON
     }
 
+    def showStatistics(){
+        def response = [:]
+         def rows = []
+         def HashMap<String, Object> campaniaEstadisticas
+         
+         if (params.cid?.length() > 0){
+            mailchimpService.campaignStats(params.cid) { json ->
+                campaniaEstadisticas= json    
+            }
+            println "AQUI-----------> "
+            
+            campaniaEstadisticas.each{
+
+                key, value -> println "${key} == ${value}"
+                def row = [:]
+                row.id = key
+                row.cell = [key, value]
+                rows.add(row)
+            }
+            response.rows = rows
+            response.page = "1"
+            response.records = "1"
+            render response as JSON
+        }
+    }
+
+
     def show() {
-        def campaniaInstance = Campania.get(params.id)
+        def campaniaInstance = Campania.get(params.id )
         if (!campaniaInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'campania.label', default: 'Campania'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'campania.label', default: 'Campania'), params.id])
             redirect(action: "list")
             return
         }
@@ -194,12 +224,9 @@ class CampaniaController {
                 campaniaInstance.estadisticas = json    
             }
 
-            def filters = [CAMPAIGNS_FILTERS_CAMPAIGN_ID : campaniaInstance.cid]
+        def filters = [CAMPAIGNS_FILTERS_CAMPAIGN_ID : campaniaInstance.cid]
 
-            mailchimpService.campaigns(filters) { json ->
-                println "campaigns"
-                println json    
-            }      
+
         }
         
         [campaniaInstance: campaniaInstance]

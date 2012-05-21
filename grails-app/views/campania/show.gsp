@@ -11,8 +11,11 @@
 		<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.20.custom.css')}" />
 		<g:javascript src='grid.locale-es.js'/>
 		<g:javascript src='jquery.jqGrid.min.js'/>
+		
 		<g:javascript>
-			jQuery("#list11").jqGrid({
+			jQuery().ready(function (){
+
+				$("#list11").jqGrid({
 			   	url: '${request.contextPath + '/campania/showStatByUser?cid='}' + $("#cid").html(), 
 				datatype: "json",
 				height: 200,
@@ -38,10 +41,35 @@
 			                    width : [120,70] } 
 			    ],
 			    caption: "Usuarios de Campañia"			
+				});
+				$("#list11").jqGrid('navGrid','#pager11',{add:false,edit:false,del:false});
+
+				$("#mailchimp").jqGrid({
+				   	url: '${request.contextPath + '/campania/showStatistics?cid='}' + $("#cid").html(), 
+					datatype: "json",
+					height: 200,
+				   	colNames:['Concepto','valor'],
+				   	colModel:[
+				   		{name:'key',index:'key', width:220},
+				   		{name:'value',index:'value', width:150},
+				   		
+				   	],
+				   	rowNum:10,
+				   	rowList:[10,20,30],
+				   	pager: '#pagerMailChimp',
+				   	sortname: 'email',
+				    viewrecords: true,
+				    sortorder: "desc",
+					multiselect: false,
+				    caption: "Estadisticas MailChimp"			
+				});
+				$("#mailchimp").jqGrid('navGrid','#pagerMailChimp',{add:false,edit:false,del:false});
+
 			});
-			jQuery("#list11").jqGrid('navGrid','#pager11',{add:false,edit:false,del:false});
+
 		</g:javascript>
 	</head>
+	
 	<body>
 		<a href="#show-campania" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div class="nav" role="navigation">
@@ -194,34 +222,17 @@
 
 			<table id="list11"></table>
 			<div id="pager11"></div>
+			
+			<br>
+			</br>
+			
 
-			<div id="list-campania" class="content scaffold-list" role="main">
-				<h1><g:message code="default.list.label" args="[estadisticas]" /></h1>
-				<table>
-					<thead>
-						<tr>
+			<table id="mailchimp"></table>
+			<div id="pagerMailChimp"></div>
+			
 
-							<th><g:message code="campania.estadisticas.label" default="Estadistica" /></th>	
 
-							<th><g:message code="campania.valor.label" default="Valor" /></th>			
-
-						</tr>
-					</thead>
-					<tbody>
-					<g:each in="${campaniaInstance.estadisticas}" status="i" var="campaniaEstadistica">
-						<g:if test="${fieldValue(bean: campaniaEstadistica, field: "key") != com.gyro.adn.domain.CampaniaController.CAMPAIGN_STATS_TIMESERIES}">
-						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-						
-							<td>${fieldValue(bean: campaniaEstadistica, field: "key")}</td>
-
-							<td>${fieldValue(bean: campaniaEstadistica, field: "value")}</td>
-						
-						</tr>							
-						</g:if>
-					</g:each>
-					</tbody>
-				</table>
-			</div>
+			<br></br>
 
 			<g:form>
 				<fieldset class="buttons">
