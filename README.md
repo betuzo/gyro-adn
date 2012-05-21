@@ -1,1 +1,1 @@
-In orde to install mail chimp plugin, first comment it on application.properties
+In order to install mail chimp plugin, first comment it on application.properties
