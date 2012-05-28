@@ -95,10 +95,13 @@ log4j = {
 grails.views.javascript.library="jquery"
 
 mailchimp.apiUrl = 'https://us5.api.mailchimp.com:443/1.3/'
-<<<<<<< HEAD
 mailchimp.apiKey = '117c950bf0bb2a3fabb3358d236c7363-us5'
-=======
-mailchimp.apiKey = 'f0db6d78ba2709a589803b76d25f8032-us5'
->>>>>>> 319034f3794a4df2203c4049e71477e0ab098ec6
 mailchimp.defaultListId = '10093f6219'
 
+
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.gyro.adn.domain.JefeCampania'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.gyro.adn.domain.JefeCampaniaRole'
+grails.plugins.springsecurity.authority.className = 'com.gyro.adn.domain.Role'
+grails.plugins.springsecurity.requestMap.className = 'com.gyro.adn.domain.Requestmap'
+grails.plugins.springsecurity.securityConfigType = 'Requestmap'

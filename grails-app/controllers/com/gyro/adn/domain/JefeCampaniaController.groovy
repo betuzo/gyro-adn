@@ -21,6 +21,10 @@ class JefeCampaniaController {
 
     def save() {
         def jefeCampaniaInstance = new JefeCampania(params)
+        jefeCampaniaInstance.enabled = true
+        jefeCampaniaInstance.accountExpired = false
+        jefeCampaniaInstance.accountLocked = false
+        jefeCampaniaInstance.passwordExpired = false
         if (!jefeCampaniaInstance.save(flush: true)) {
             render(view: "create", model: [jefeCampaniaInstance: jefeCampaniaInstance])
             return

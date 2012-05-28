@@ -50,11 +50,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${jefeCampaniaInstance?.email}">
+				<g:if test="${jefeCampaniaInstance?.username}">
 				<li class="fieldcontain">
-					<span id="email-label" class="property-label"><g:message code="jefeCampania.email.label" default="Email" /></span>
+					<span id="username-label" class="property-label"><g:message code="jefeCampania.username.label" default="Email" /></span>
 					
-						<span class="property-value" aria-labelledby="email-label"><g:fieldValue bean="${jefeCampaniaInstance}" field="email"/></span>
+						<span class="property-value" aria-labelledby="username-label"><g:fieldValue bean="${jefeCampaniaInstance}" field="username"/></span>
 					
 				</li>
 				</g:if>

@@ -14,7 +14,9 @@
 		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'apple-touch-icon-retina.png')}">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
+		<link rel="stylesheet" href="${resource(dir: 'css', file: 'stylelogin.css')}" type="text/css">
 		<g:javascript src='jquery-1.7.1.min.js'/>
+		<g:javascript src='login.js'/>
 		<g:javascript>
 			$(document).ready(function() { 	
 				$('#compania').ready(function() {
@@ -76,12 +78,63 @@
 			        });    
 			    });
 			});
+			function authAjax() {
+			   	var form = document.loginForm;
+			   	var params = $('form').serialize();
+			   	if($("#remember_me:checked").val() != 'on')
+					params = params + '&_spring_security_remember_me=false';
+				alert(params);
+			   	$.ajax({
+		            url: "/gyro-adn/j_spring_security_check?ajax=true",
+		        	data: params,
+		        	type: 'POST',
+		            cache: false,
+		            success: function(html) {
+		            	if (html.success==true){
+		            		$("#secSeguridad").html(html.html);
+		            	}else{
+		            		$("#ajaxLoginError").html(html.error);
+		            	}
+		            }
+			    });
+			}
 		</g:javascript>
 		<g:layoutHead/>
         <r:layoutResources />
 	</head>
 	<body>
 		<div id="grailsLogo" role="banner"><a href="http://grails.org"><img src="${resource(dir: 'images', file: 'gyro_logo.jpg')}" alt="Grails"/></a></div>
+		<sec:ifNotLoggedIn>
+			<div id="secSeguridad">
+			<div id="loginContainer">
+				<a href="#" id="loginButton"><span>Iniciar</span><em></em></a>
+		        <div id="loginBox">
+		        	<form id='loginForm' name='loginForm' action='${request.contextPath}/j_spring_security_check?ajax=true' method='POST'>
+       						<fieldset id="body">
+		                    <fieldset>
+		                        <label for="username">Email Address</label>
+         						<input type='text' class='text_' name='j_username' id='username' />
+		                    </fieldset>
+		                    <fieldset>
+		                        <label for="password">Password</label>
+		                        <input type="password" name="j_password" id="password" />
+		                    </fieldset>
+		                    <input type="button" id="login" value="Entrar" onclick='authAjax()' />
+		                    <label for="checkbox">
+		                    <input type="checkbox" id="remember_me" name='_spring_security_remember_me' <g:if test='${hasCookie}'>checked='checked'</g:if> />Remember me</label>
+		                </fieldset>
+		                <div id="ajaxLoginError">asdasdas</div>
+		                <span><a href="#">Forgot your password?</a></span>
+		            </form>
+		        </div>
+		    </div>   
+		    </div>       
+		</sec:ifNotLoggedIn>
+		<sec:ifLoggedIn>
+			<div id="secSeguridad">
+				<a href="/gyro-adn/logout" id="logoutButton"><span><sec:username /></span></a>
+			</div>
+		</sec:ifLoggedIn>
 		<g:layoutBody/>
 		<div class="footer" role="contentinfo"></div>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
@@ -89,3 +142,4 @@
         <r:layoutResources />
 	</body>
 </html>
+
