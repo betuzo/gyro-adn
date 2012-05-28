@@ -25,8 +25,8 @@
 				$('#pais').ready(function() {
 					$("#pais").change();
 				});
-				$('#clasificacion').ready(function() {
-					$("#clasificacion").change();
+				$('#selclasificacion').ready(function() {
+					$("#selclasificacion").change();
 				});
 			    $("#pais").change(function() {
 			    	$.ajax({
@@ -49,13 +49,13 @@
 			            }
 			        });
 			    });
-			    $("#clasificacion").change(function() {
+			    $("#selclasificacion").change(function() {
 			    	$.ajax({
 			        	url: "/gyro-adn/compania/clasificacionSelected",
 			            data: { id: this.value, idSubclasificaciones: $("#subclasificaciones").val() },
 			            cache: false,
 			            success: function(html) {
-			            	$("#subclasificaciones").html(html);
+			            	$("#selsubclasificaciones").html(html);
 			            }
 			        });
 			    });

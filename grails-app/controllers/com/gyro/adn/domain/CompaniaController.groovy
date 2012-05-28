@@ -108,7 +108,7 @@ class CompaniaController {
             idSubclasificaciones.add(element as Long)
         }
         render g.select(optionKey: 'id', 
-                        from: clasificacion.subclasificaciones, 
+                        from: clasificacion?.subclasificaciones, 
                         id: 'subclasificaciones', 
                         name: 'subclasificaciones', 
                         multiple: 'multiple',

@@ -7,7 +7,7 @@ class AddressController {
      def estadoSelected = {
         def estado = Estado.get(params.id)
         render g.select(optionKey: 'id', 
-                        from: estado.municipios, 
+                        from: estado?.municipios, 
                         id: 'municipio', 
                         name: 'municipio.id', 
                         class: 'many-to-one', 
@@ -21,7 +21,7 @@ class AddressController {
             params.idEstado = pais.estados?.toArray()?.getAt(0)?.id
             
         render g.select(optionKey: 'id', 
-                        from: pais.estados, 
+                        from: pais?.estados, 
                         id: 'estado', 
                         name: 'municipio.estado.id', 
                         class: 'many-to-one', 

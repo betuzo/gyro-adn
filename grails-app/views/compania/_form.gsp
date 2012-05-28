@@ -69,7 +69,7 @@
 		<g:message code="compania.clasificacion.label" default="Clasificacion" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="clasificacion" name="subclasificaciones.clasificacion.id" from="${com.gyro.adn.domain.CompaniaClasificacion.list()}" optionKey="id" required="" value="${companiaInstance?.subclasificaciones?.toArray()?.getAt(0)?.clasificacion?.id}" class="many-to-one"/>
+	<g:select id="selclasificacion" name="subclasificaciones.clasificacion.id" from="${com.gyro.adn.domain.CompaniaClasificacion.list()}" optionKey="id" required="" value="${companiaInstance?.subclasificaciones?.toArray()?.getAt(0)?.clasificacion?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: companiaInstance, field: 'subclasificaciones', 'error')} ">
@@ -77,7 +77,7 @@
 		<g:message code="compania.subclasificaciones.label" default="Subclasificaciones" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="subclasificaciones" name="subclasificaciones" from="${companiaInstance?.subclasificaciones?.toArray()?.getAt(0)?.clasificacion?.subclasificaciones}" multiple="multiple" optionKey="id" size="5" required="" value="${companiaInstance?.subclasificaciones*.id}" class="many-to-many"/>
+	<g:select id="selsubclasificaciones" name="subclasificaciones" from="${companiaInstance?.subclasificaciones?.toArray()?.getAt(0)?.clasificacion?.subclasificaciones}" multiple="multiple" optionKey="id" size="5" required="" value="${companiaInstance?.subclasificaciones*.id}" class="many-to-many"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: companiaInstance, field: 'campanias', 'error')} ">
