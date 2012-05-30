@@ -152,7 +152,11 @@
     <li><g:link controller="campaniaUsuario" action="show" id="${u.id}">${u?.encodeAsHTML()}</g:link></li>
 </g:each>
 <li class="add">
-<g:link controller="campaniaUsuario" action="create" params="['campania.id': campaniaInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'campaniaUsuario.label', default: 'CampaniaUsuario')])}</g:link>
+<g:if test="${campaniaInstance?.cid}">
+<g:if test="${campaniaInstance?.estadisticas?.status != 'sent'}">
+	<g:link controller="campaniaUsuario" action="create" params="['campania.id': campaniaInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'campaniaUsuario.label', default: 'CampaniaUsuario')])}</g:link>
+</g:if>
+</g:if>
 </li>
 </ul>
 

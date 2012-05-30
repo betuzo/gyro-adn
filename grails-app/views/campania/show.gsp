@@ -15,7 +15,7 @@
 		<g:javascript>
 			jQuery().ready(function (){
 
-				$("#list11").jqGrid({
+				$("#listMailChimp").jqGrid({
 			   	url: '${request.contextPath + '/campania/showStatByUser?cid='}' + $("#cid").html(), 
 				datatype: "json",
 				height: 200,
@@ -30,7 +30,7 @@
 			   	],
 			   	rowNum:10,
 			   	rowList:[10,20,30],
-			   	pager: '#pager11',
+			   	pager: '#pagerListMailChimp',
 			   	sortname: 'email',
 			    viewrecords: true,
 			    sortorder: "desc",
@@ -42,7 +42,7 @@
 			    ],
 			    caption: "Usuarios de Campañia"			
 				});
-				$("#list11").jqGrid('navGrid','#pager11',{add:false,edit:false,del:false});
+				$("#listMailChimp").jqGrid('navGrid','#pagerListMailChimp',{add:false,edit:false,del:false});
 
 				$("#mailchimp").jqGrid({
 				   	url: '${request.contextPath + '/campania/showStatistics?cid='}' + $("#cid").html(), 
@@ -195,6 +195,17 @@
 					
 				</li>
 				</g:if>
+
+				<g:each in="${campaniaInstance?.estadisticas}" status="i" var="estadistica">
+					<g:if test="${estadistica}">
+					<li class="fieldcontain">
+						<span id="${estadistica.key}-label" class="property-label"><g:message code="campania.${estadistica.key}.label" default="${estadistica.key}" /></span>
+						
+							<span id="${estadistica.key}" class="property-value" aria-labelledby="${estadistica.key}-label"><g:fieldValue bean="${estadistica}" field="value"/></span>
+						
+					</li>
+					</g:if>
+				</g:each>
 			
 				<g:if test="${campaniaInstance?.citas}">
 				<li class="fieldcontain">
@@ -220,8 +231,8 @@
 			
 			</ol>
 
-			<table id="list11"></table>
-			<div id="pager11"></div>
+			<table id="listMailChimp"></table>
+			<div id="pagerListMailChimp"></div>
 			
 			<br>
 			</br>

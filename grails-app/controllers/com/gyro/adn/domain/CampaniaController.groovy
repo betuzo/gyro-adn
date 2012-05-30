@@ -28,6 +28,8 @@ class CampaniaController {
     static final String CAMPAIGN_TYPE_RSS                   = "rss";
     static final String CAMPAIGN_TYPE_TRANS                 = "trans";
 
+
+    static final String CAMPAIGN_OPTION_LIST_NAME           = "name";
     static final String CAMPAIGN_OPTION_LIST_ID             = "list_id";
     static final String CAMPAIGN_OPTION_SUBJECT             = "subject";
     static final String CAMPAIGN_OPTION_FROM_EMAIL          = "from_email";
@@ -193,12 +195,10 @@ class CampaniaController {
          if (params.cid?.length() > 0){
             mailchimpService.campaignStats(params.cid) { json ->
                 campaniaEstadisticas= json    
-            }
-            println "AQUI-----------> "
-            
+            }            
             campaniaEstadisticas.each{
 
-                key, value -> println "${key} == ${value}"
+                key, value ->
                 def row = [:]
                 row.id = key
                 row.cell = [key, value]
@@ -211,35 +211,71 @@ class CampaniaController {
         }
     }
 
+    def getFullCampania( String id, Closure callback ){
+        def campaniaInstance = Campania.get(id )
+        if (campaniaInstance.cid?.length() > 0){
+            def filtersCampaigns = [CAMPAIGNS_FILTERS_CAMPAIGN_ID : campaniaInstance.cid]
+
+            mailchimpService.campaigns(filtersCampaigns){ json ->
+                def data = json?.get(CAMPAIGN_STATS_DATA)
+                campaniaInstance.estadisticas = [ : ]
+
+                data.each{ it ->
+                    it.each{ key, value ->
+                        println "$key : $value"
+                        switch(key) {
+                            case CAMPAIGN_OPTION_LIST_ID:
+                            case CAMPAIGN_OPTION_SUBJECT:
+                            case CAMPAIGN_OPTION_TYPE:
+                            case CAMPAIGN_OPTION_SEND_TIME:
+                            case CAMPAIGN_OPTION_TITLE:
+                            case CAMPAIGN_OPTION_FROM_NAME:
+                            case CAMPAIGN_OPTION_FROM_EMAIL:
+                            case CAMPAIGN_OPTION_ARCHIVE_URL:
+                            case CAMPAIGN_OPTION_STATUS:
+                            case CAMPAIGN_OPTION_EMAILS_SENT:
+                                campaniaInstance.estadisticas."$key" = value        
+                            break
+                        }
+                    }
+                }
+            }
+
+            def filtersList = [CAMPAIGN_OPTION_LIST_ID : campaniaInstance.estadisticas."$CAMPAIGN_OPTION_LIST_ID"]
+            
+            mailchimpService.lists(filtersList){ json ->
+                def data = json?.get(CAMPAIGN_STATS_DATA)
+                data.each{ it ->
+                    campaniaInstance?.estadisticas."$CAMPAIGN_OPTION_LIST_ID" = it?.get(CAMPAIGN_OPTION_LIST_NAME)
+                }
+            }
+        }
+        callback(campaniaInstance)
+    }
 
     def show() {
-        def campaniaInstance = Campania.get(params.id )
+        def campaniaInstance
+        getFullCampania(params.id){ campania ->
+            campaniaInstance = campania
+        }
         if (!campaniaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'campania.label', default: 'Campania'), params.id])
             redirect(action: "list")
             return
         }
-        if (campaniaInstance.cid?.length() > 0){
-            mailchimpService.campaignStats(campaniaInstance.cid) { json ->
-                campaniaInstance.estadisticas = json    
-            }
-
-        def filters = [CAMPAIGNS_FILTERS_CAMPAIGN_ID : campaniaInstance.cid]
-
-
-        }
-        
         [campaniaInstance: campaniaInstance]
     }
 
     def edit() {
-        def campaniaInstance = Campania.get(params.id)
+        def campaniaInstance
+        getFullCampania(params.id){ campania ->
+            campaniaInstance = campania
+        }
         if (!campaniaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'campania.label', default: 'Campania'), params.id])
             redirect(action: "list")
             return
         }
-
         [campaniaInstance: campaniaInstance]
     }
 
