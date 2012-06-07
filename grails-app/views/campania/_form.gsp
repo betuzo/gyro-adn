@@ -79,7 +79,12 @@
 		<g:message code="campania.fase.label" default="Fase" />
 		
 	</label>
-	<g:select name="fase" from="${campaniaInstance.constraints.fase.inList}" value="${campaniaInstance?.fase}" valueMessagePrefix="campania.fase" noSelection="['': '']"/>
+	<g:if test="${campaniaInstance?.id}">
+		<g:select name="fase" from="${campaniaInstance.constraints.fase.inList}" value="${campaniaInstance?.fase}" valueMessagePrefix="campania.fase" noSelection="['': '']"/>
+	</g:if>
+	<g:if test="${campaniaInstance?.id == null}">
+		<g:select name="fase" from="${['Contacto']}" value="Contacto" valueMessagePrefix="campania.fase" />
+	</g:if>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: campaniaInstance, field: 'archivos', 'error')} ">

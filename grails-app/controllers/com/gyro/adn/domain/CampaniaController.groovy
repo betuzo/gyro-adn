@@ -6,6 +6,14 @@ import grails.converters.JSON
 
 class CampaniaController {
 
+    // fase inList: ["Contacto", "Diseño", "Emailing", "Preparacion", "Fin"]
+
+    static final String CAMPAIGN_PHASE_CONTACT              = "Contacto";
+    static final String CAMPAIGN_PHASE_DESIGN               = "Diseño";
+    static final String CAMPAIGN_PHASE_EMAILING             = "Emailing";
+    static final String CAMPAIGN_PHASE_PREPARING            = "Preparacion";
+    static final String CAMPAIGN_PHASE_COMPLETE             = "Fin";
+    
     static final String CAMPAIGN_STATS_TIMESERIES           = "timeseries";
     static final String CAMPAIGN_STATS_DATA                 = "data";
     static final String CAMPAIGN_STATS_EMAIL                = "email";
@@ -264,6 +272,52 @@ class CampaniaController {
             return
         }
         [campaniaInstance: campaniaInstance]
+    }
+
+    def nextStep() {
+        def campaniaInstance = Campania.get(params.id)
+        def fase = ""
+        def msg = ""
+        def error = ""
+        def html = ""
+        if (campaniaInstance != null) {
+            switch(params.fase) {
+                case CAMPAIGN_PHASE_CONTACT:
+                    campaniaInstance.fase = CAMPAIGN_PHASE_DESIGN;
+                break
+                case CAMPAIGN_PHASE_DESIGN:
+                    campaniaInstance.fase = CAMPAIGN_PHASE_EMAILING;
+                break
+                case CAMPAIGN_PHASE_EMAILING:
+                    campaniaInstance.fase = CAMPAIGN_PHASE_PREPARING;
+                break
+                case CAMPAIGN_PHASE_PREPARING:
+                    campaniaInstance.fase = CAMPAIGN_PHASE_COMPLETE;
+                break
+                default:
+                    fase = params.fase
+                    msg = 'Error al pasar al siguiente estado'
+                    error = '1'
+                break
+            }
+
+            if (!campaniaInstance.save(flush: true)) {
+                fase = params.fase
+                msg = 'Error al pasar al siguiente estado'
+                error = '1'
+            }else{
+                fase = campaniaInstance.fase     
+                msg = 'Actualizado correctamente'
+                error = '0'
+            }
+        }else{
+            fase = params.fase
+            msg = 'No existe la campaña'
+            error = '1'
+        }
+        def htmlRender = '<span id="faseVal" class="property-value" aria-labelledby="fase-label">' + fase + '</span>'
+        render([error: error, msg: msg, fase: fase, html: htmlRender] as JSON)
+        return
     }
 
     def edit() {

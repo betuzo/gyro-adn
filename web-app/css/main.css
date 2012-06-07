@@ -527,6 +527,7 @@ th:hover, tr:hover {
 }
 
 .buttons input,
+.buttons div,
 .buttons a {
 	background-color: transparent;
 	border: 0;

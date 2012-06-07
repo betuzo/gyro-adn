@@ -97,7 +97,8 @@
 		            	}
 		            }
 			    });
-			}
+    			
+	    	}
 		</g:javascript>
 		<g:layoutHead/>
         <r:layoutResources />

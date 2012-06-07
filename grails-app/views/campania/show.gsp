@@ -1,6 +1,7 @@
 
 <%@ page import="com.gyro.adn.domain.Campania" %>
 <!doctype html>
+
 <html>
 	<head>
 		<meta name="layout" content="main">
@@ -66,7 +67,18 @@
 				$("#mailchimp").jqGrid('navGrid','#pagerMailChimp',{add:false,edit:false,del:false});
 
 			});
-
+			$("#nextStep").click(function() {
+	    		$.ajax({
+	        		url: "/gyro-adn/campania/nextStep",
+	            	data: { id: $("#id").val(), fase: $("#faseVal").html() },
+	            	cache: false,
+	            	success: function(html) {
+	            		$("#fase").html(html.html);
+	            		if (html.fase = 'Fin')
+	            			$("#nextStep").html('');
+	            	}
+	        	});
+	    	});
 		</g:javascript>
 	</head>
 	
@@ -170,9 +182,9 @@
 				<g:if test="${campaniaInstance?.fase}">
 				<li class="fieldcontain">
 					<span id="fase-label" class="property-label"><g:message code="campania.fase.label" default="Fase" /></span>
-					
-						<span class="property-value" aria-labelledby="fase-label"><g:fieldValue bean="${campaniaInstance}" field="fase"/></span>
-					
+						<div id="fase">
+						<span id="faseVal" class="property-value" aria-labelledby="fase-label"><g:fieldValue bean="${campaniaInstance}" field="fase"/></span>
+						</div>
 				</li>
 				</g:if>
 			
@@ -247,9 +259,12 @@
 
 			<g:form>
 				<fieldset class="buttons">
-					<g:hiddenField name="id" value="${campaniaInstance?.id}" />
+					<g:hiddenField id="id" name="id" value="${campaniaInstance?.id}" />
 					<g:link class="edit" action="edit" id="${campaniaInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
 					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+					<g:if test="${campaniaInstance?.fase != 'Fin'}">
+						<div class="edit" id="nextStep"><g:message code="default.button.nextStep.label" default="Siguiente Estado" /></div>
+					</g:if>
 				</fieldset>
 			</g:form>
 		</div>
