@@ -309,6 +309,12 @@ class CampaniaController {
                 fase = campaniaInstance.fase     
                 msg = 'Actualizado correctamente'
                 error = '0'
+                if (campaniaInstance.fase == CAMPAIGN_PHASE_EMAILING){
+                    mailchimpService.campaignSendNow(campaniaInstance.cid) { json ->
+                        if (json.code != 0)
+                            msg = json.error
+                    }
+                }
             }
         }else{
             fase = params.fase

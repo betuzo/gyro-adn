@@ -55,7 +55,7 @@
 				   		{name:'value',index:'value', width:150},
 				   		
 				   	],
-				   	rowNum:10,
+				   	rowNum:20,
 				   	rowList:[10,20,30],
 				   	pager: '#pagerMailChimp',
 				   	sortname: 'email',
@@ -65,19 +65,26 @@
 				    caption: "Estadisticas MailChimp"			
 				});
 				$("#mailchimp").jqGrid('navGrid','#pagerMailChimp',{add:false,edit:false,del:false});
-
 			});
 			$("#nextStep").click(function() {
-	    		$.ajax({
-	        		url: "/gyro-adn/campania/nextStep",
-	            	data: { id: $("#id").val(), fase: $("#faseVal").html() },
-	            	cache: false,
-	            	success: function(html) {
-	            		$("#fase").html(html.html);
-	            		if (html.fase = 'Fin')
-	            			$("#nextStep").html('');
-	            	}
-	        	});
+				var isNext;
+				if ($("#faseVal").html() != 'Diseño')
+					isNext = confirm('¿Esta seguro de ir al siguiente paso?');
+				else
+					isNext = confirm('¿Esta seguro de ir al siguiente paso, se enviara la campaña a los destinatarios?');
+				if (isNext){
+					$.ajax({
+		        		url: "/gyro-adn/campania/nextStep",
+		            	data: { id: $("#id").val(), fase: $("#faseVal").html() },
+		            	cache: false,
+		            	success: function(html) {
+		            		$("#fase").html(html.html);
+		            		if (html.fase == 'Fin')
+		            			$("#nextStep").html(' ');
+		            		alert(html.msg);
+		            	}
+		        	});
+				}
 	    	});
 		</g:javascript>
 	</head>
