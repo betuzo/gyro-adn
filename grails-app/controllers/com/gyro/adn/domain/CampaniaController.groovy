@@ -230,7 +230,6 @@ class CampaniaController {
 
                 data.each{ it ->
                     it.each{ key, value ->
-                        println "$key : $value"
                         switch(key) {
                             case CAMPAIGN_OPTION_LIST_ID:
                             case CAMPAIGN_OPTION_SUBJECT:
